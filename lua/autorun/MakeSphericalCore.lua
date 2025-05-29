@@ -214,26 +214,6 @@ if SERVER then
 				args[ i ] = constr[ factory.Args[ i ] ]
 			
 			end
-
-			-- GG Wire team, spelling "Ctrl" wrong
-			-- This section is just to fix stuff like wire hydraulics that need "crontollers"
-			if constr.MyCrtl then
-				
-				-- Apply the constraint & set all the crap wire hydraulics/winches need etc
-				local controller = Entity( constr.MyCrtl )
-				controller.constraint:Remove()
-				
-				if constr.Type == "WireHydraulic" then
-				
-					WireHydraulicTracking[ constr.MyCrtl ] = controller
-					
-				elseif constr.Type == "WireWinch" then 
-				
-					WireWinchTracking[ constr.MyCrtl ] = controller
-				
-				end
-			
-			end
 				
 			-- Apply the constraint			
 			local constr, misc = factory.Func( unpack( args ) )
