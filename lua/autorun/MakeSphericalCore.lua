@@ -222,7 +222,7 @@ if SERVER then
 				-- Apply the constraint & set all the crap wire hydraulics/winches need etc
 				local controller = Entity( constr.MyCrtl )
 
-				if controller:IsValid() then
+				if controller:IsValid() and IsValid(controller.constraint) then
 
 					controller.constraint:Remove()
 
