@@ -304,11 +304,11 @@ if CLIENT then
 		local id = ent:EntIndex()
 		if not temp[ id ] then return end
 
-		ent.RenderOverride = function( self )
+		ent.RenderOverride = function( self, flags )
 
-			ent:SetRenderOrigin( offset )
-			ent:SetupBones()
-			if ent.Draw then ent:Draw() else ent:DrawModel() end
+			self:SetRenderOrigin( offset )
+			self:SetupBones()
+			if self.Draw then self:Draw( flags ) else self:DrawModel( flags ) end
 			ent:SetRenderOrigin( nil )
 
 		end
