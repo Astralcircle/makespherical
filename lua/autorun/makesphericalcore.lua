@@ -281,12 +281,12 @@ if CLIENT then
 
 		end
 
-		ent.RenderOverride = function( self )
+		ent.RenderOverride = function( self, flags )
 
-			ent:SetRenderOrigin( ent:LocalToWorld( offset ) )
-			ent:SetupBones()
-			if ent.Draw then ent:Draw() else ent:DrawModel() end
-			ent:SetRenderOrigin( nil )
+			self:SetRenderOrigin( self:LocalToWorld( offset ) )
+			self:SetupBones()
+			if self.Draw then self:Draw( flags ) else self:DrawModel( flags ) end
+			self:SetRenderOrigin( nil )
 
 		end
 
@@ -309,7 +309,7 @@ if CLIENT then
 			self:SetRenderOrigin( offset )
 			self:SetupBones()
 			if self.Draw then self:Draw( flags ) else self:DrawModel( flags ) end
-			ent:SetRenderOrigin( nil )
+			self:SetRenderOrigin( nil )
 
 		end
 
