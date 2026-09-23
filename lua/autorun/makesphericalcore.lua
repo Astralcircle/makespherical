@@ -154,7 +154,7 @@ if SERVER then
 	function MakeSpherical.ApplySphericalCollisionsE2( ent, enabled, radius )
 
 		local phys = ent:GetPhysicsObject()
-		local valid = phys:GetMass()
+		local valid = phys:IsValid()
 
 		local mass = valid and phys:GetMass() or 1
 		local ismove = valid and phys:IsMoveable() or false
