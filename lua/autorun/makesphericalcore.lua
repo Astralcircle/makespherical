@@ -51,20 +51,22 @@ if SERVER then
 		-- The ent's OBB size changes when made spherical
 
 		-- In case the legacy dupe is old enough to not include these
-		data.mass = ent:GetPhysicsObject():GetMass() or data.mass
+		local phys = ent:GetPhysicsObject()
+		local valid = phys:IsValid()
+
+		data.mass = valid and phys:GetMass() or data.mass or 1
 		data.noradius = data.noradius or ent.noradius
 		data.isrenderoffset = 0
 		data.renderoffset = nil
 		data.obbcenter = ent:OBBCenter()
 
-		local phys = ent:GetPhysicsObject()
-		local ismove = phys:IsMoveable()
-		local issleep = phys:IsAsleep()
+		local ismove = valid and phys:IsMoveable() or false
+		local issleep = valid and phys:IsAsleep() or false
 
 		local radius = math.Clamp( data.radius, 1, 200 )
 		if data.enabled then
 
-			ent:PhysicsInitSphere( radius, phys:GetMaterial() )
+			ent:PhysicsInitSphere( radius, valid and phys:GetMaterial() or "Default" )
 			ent:SetCollisionBounds( Vector( -radius, -radius, -radius ), Vector( radius, radius, radius ) )
 
 		else
@@ -77,9 +79,12 @@ if SERVER then
 
 		-- New physobject after applying spherical collisions
 		local phys = ent:GetPhysicsObject()
-		phys:SetMass( data.mass )
-		phys:EnableMotion( ismove )
-		if not issleep then phys:Wake() end
+
+		if phys:IsValid() then
+			phys:SetMass( data.mass )
+			phys:EnableMotion( ismove )
+			if not issleep then phys:Wake() end
+		end
 
 		ent.noradius = data.noradius
 		ent.obbcenter = data.obbcenter
@@ -91,13 +96,15 @@ if SERVER then
 	function MakeSpherical.ApplySphericalCollisions( ply, ent, data )
 
 		local phys = ent:GetPhysicsObject()
-		local ismove = phys:IsMoveable()
-		local issleep = phys:IsAsleep()
+		local valid = phys:IsValid()
+
+		local ismove = valid and phys:IsMoveable() or false
+		local issleep = valid and phys:IsAsleep() or false
 		local radius = math.Clamp( data.radius, 1, 200 )
 
 		if data.enabled then
 
-			ent:PhysicsInitSphere( radius, phys:GetMaterial() )
+			ent:PhysicsInitSphere( radius, valid and phys:GetMaterial() or "Default" )
 			ent:SetCollisionBounds( Vector( -radius, -radius, -radius ) , Vector( radius, radius, radius ) )
 
 		else
@@ -131,9 +138,12 @@ if SERVER then
 
 		-- New physobject after applying spherical collisions
 		local phys = ent:GetPhysicsObject()
-		phys:SetMass( data.mass )
-		phys:EnableMotion( ismove )
-		if not issleep then phys:Wake() end
+
+		if phys:IsValid() then
+			phys:SetMass( data.mass )
+			phys:EnableMotion( ismove )
+			if not issleep then phys:Wake() end
+		end
 
 		data.radius = radius
 		ent.noradius = data.noradius
@@ -144,14 +154,16 @@ if SERVER then
 	function MakeSpherical.ApplySphericalCollisionsE2( ent, enabled, radius )
 
 		local phys = ent:GetPhysicsObject()
-		local mass = phys:GetMass()
-		local ismove = phys:IsMoveable()
-		local issleep = phys:IsAsleep()
+		local valid = phys:GetMass()
+
+		local mass = valid and phys:GetMass() or 1
+		local ismove = valid and phys:IsMoveable() or false
+		local issleep = valid and phys:IsAsleep() or false
 		local radius = math.Clamp( radius, 1, 200 )
 
 		if enabled then
 
-			ent:PhysicsInitSphere( radius, phys:GetMaterial() )
+			ent:PhysicsInitSphere( radius, valid and phys:GetMaterial() or "Default" )
 			ent:SetCollisionBounds( Vector( -radius, -radius, -radius ) , Vector( radius, radius, radius ) )
 
 		else
@@ -164,9 +176,12 @@ if SERVER then
 
 		-- New physobject after applying spherical collisions
 		local phys = ent:GetPhysicsObject()
-		phys:SetMass( mass )
-		phys:EnableMotion( ismove )
-		if not issleep then phys:Wake() end
+
+		if phys:IsValid() then
+			phys:SetMass( mass )
+			phys:EnableMotion( ismove )
+			if not issleep then phys:Wake() end
+		end
 
 			local data = {}
 			data.enabled = true
